@@ -1,0 +1,72 @@
+simple_mq:
+  connections:
+    default:
+      host: 192.168.59.103
+      port: 5672
+      user: admin
+      password: error
+      vhost: "/"
+
+  exchanges:
+    call-stats:
+      connection: default
+      type: fanout
+      durable: true
+
+    rate-limit:
+      connection: default
+      type: direct
+      durable: true
+
+    event-processed:
+      connection: default
+      type: direct
+      durable: true
+
+    test-exchange:
+      connection: default
+      type: fanout
+      durable: false
+
+  producers:
+    github-event:
+      exchange: event-processed
+      routing_key: github-event
+
+    github-call:
+      exchange: call-stats
+      routing_key: sync_call_total
+
+    test:
+      exchange: test-exchange
+
+  consumers:
+    github_event_consumer:
+      exchange: event-processed
+      ack: true
+      queue:
+        durable: true
+        name: github-events
+        qos:
+          prefetch_size: 1
+      bindings:
+        -
+          queue: github-events
+          routing_key: github-event
+
+    rate_limit_monitor:
+      exchange: rate-limit
+      queue:
+        durable: true
+        name: rate-limits
+        qos:
+          prefetch_size: 1
+
+    test:
+      exchange: test-exchange
+      queue:
+        name: test-rabbit-exchange-fanout
+        durable: false
+      bindings:
+        -
+          queue: test-rabbit-exchange-fanout
