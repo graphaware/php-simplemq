@@ -38,7 +38,7 @@ simple_mq:
 
   producers:
     logs:
-      exchange: event-processed
+      exchange: logs
 
     errors:
       exchange: error-logs
@@ -109,4 +109,5 @@ also which binding keys to use for binding queues to exchanges.
 --- 
 
 License: MIT
+
 Author: [Christophe Willemsen](mailto:christophe@graphaware.com)
