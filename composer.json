@@ -1,5 +1,5 @@
 {
-    "name": "graphaware/github-sync",
+    "name": "graphaware/php-simplemq",
     "description": "Github Events API Sync module",
     "require": {
         "videlalvaro/php-amqplib": "^2.5",
