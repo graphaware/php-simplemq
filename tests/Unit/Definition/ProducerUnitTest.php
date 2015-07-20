@@ -20,5 +20,6 @@ class ProducerUnitTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($producer->isAutoClose());
         $this->assertFalse($producer->isRunning());
         $this->assertEquals('', $producer->getRoutingKey());
+        $this->assertEquals('fanout', $producer->getExchange()->getType());
     }
 }
