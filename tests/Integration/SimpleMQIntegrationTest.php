@@ -47,4 +47,41 @@ class SimpleMQIntegrationTest extends \PHPUnit_Framework_TestCase
         $message = json_encode(array('id' => 1));
         $p1->sendMessage($message);
     }
+
+    public function testConsumersCanRun()
+    {
+        $c1 = $this->simpleMQ->getConsumer('consumer-1');
+        $c1->run();
+        $this->assertTrue($c1->isRunning());
+    }
+
+    public function testMessagesAreSentAndReceived()
+    {
+        $p1 = $this->simpleMQ->getProducer('producer-1');
+        $msg = json_encode(array('id' => 1));
+        $c1 = $this->simpleMQ->getConsumer('consumer-1');
+        $c1->run();
+        $p1->sendMessage($msg);
+        $message = $c1->getMessage();
+        $this->assertEquals($msg, $message->body);
+    }
+
+    public function testMessageIsNullWhenNothingInQueue()
+    {
+        $c1 = $this->simpleMQ->getConsumer('consumer-1');
+        $c1->purge();
+        $this->assertNull($c1->getMessage());
+    }
+
+    public function messagesAreHoldInQueueWhenQIsNotAutoDelete()
+    {
+        $p1 = $this->simpleMQ->getProducer('producer-1');
+        $msg = json_encode(array('id' => 1));
+        $c1 = $this->simpleMQ->getConsumer('consumer-1');
+        $c1->run();
+        $c1->close();
+        $p1->sendMessage($msg);
+        $message = $c1->getMessage();
+        $this->assertEquals($message, $msg);
+    }
 }

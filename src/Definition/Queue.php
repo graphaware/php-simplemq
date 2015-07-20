@@ -20,13 +20,27 @@ class Queue
     protected $prefetchCount;
 
     /**
+     * @var bool
+     */
+    protected $autoDelete;
+
+    /**
+     * var bool
+     */
+    protected $exclusive;
+
+    /**
      * @param $name
      * @param bool $durable
+     * @param bool $autoDelete
+     * @param bool $exclusive
      */
-    public function __construct($name, $durable = false)
+    public function __construct($name, $durable = false, $autoDelete = false, $exclusive = false)
     {
         $this->name = (string) $name;
         $this->durable = (bool) $durable;
+        $this->autoDelete = (bool) $autoDelete;
+        $this->exclusive = (bool) $exclusive;
     }
 
     /**
@@ -43,5 +57,21 @@ class Queue
     public function isDurable()
     {
         return $this->durable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoDelete()
+    {
+        return $this->autoDelete;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExclusive()
+    {
+        return $this->exclusive;
     }
 }

@@ -43,6 +43,14 @@ class MQManagerUnitTest extends \PHPUnit_Framework_TestCase
         $this->assertConsumerExist('consumer-3');
     }
 
+    public function testBindingsAreSetOnConsumers()
+    {
+        $c2 = $this->manager->getConsumer('consumer-2');
+        $this->assertCount(1, $c2->getBindings());
+        $b1 = $c2->getBindings()[0];
+        $this->assertEquals('rk1', $b1['routing_key']);
+    }
+
     /**
      * @expectedException \GraphAware\SimpleMQ\Exception\SimpleMQException
      */

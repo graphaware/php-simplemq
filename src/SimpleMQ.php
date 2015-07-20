@@ -41,6 +41,14 @@ class SimpleMQ
     }
 
     /**
+     * @return \GraphAware\SimpleMQ\MQManager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
      * @param $name
      * @return \GraphAware\SimpleMQ\Definition\Producer
      */
@@ -56,5 +64,15 @@ class SimpleMQ
     public function getConsumer($name)
     {
         return $this->manager->getConsumer($name);
+    }
+
+    /**
+     * Bootstraps the consumers in order to create queues, channels, exchanges and bindings before starting producers
+     */
+    public function bootstrapFabric()
+    {
+        foreach ($this->manager->getConsumers() as $consumer) {
+            $consumer->run();
+        }
     }
 }

@@ -63,10 +63,10 @@ simple_mq:
         durable: true
         qos:
           prefetch_size: 1
-      bindings:
-        -
-          queue: my-app-error-logs
-          routing_key: error
+        bindings:
+          -
+            queue: my-app-error-logs
+            routing_key: error
 ```
 
 Bootstrap the library by providing your configuration file location :
@@ -93,6 +93,28 @@ $callback = function($message) {
 };
 
 $consumer->consume($callback);
+```
+
+Getting a single message :
+
+```php
+$message = $consumer->getMessage();
+// Returns a AMQPMessage instance
+```
+
+Getting more than one message :
+
+```php
+$messages = $consumer->getMessageBatch(10);
+// Returns an array of AMQPMessage
+```
+
+Sometimes, there can be a latency between a message is sent and this message to be seen by the producers (for eg in CI suites).
+
+You can define a maxAttempts to reach the batchSize before stopping reading queues :
+
+```php
+$messages = $consumer->getMessageBatch(10, 20);
 ```
 
 And to start sending messages to exchanges, it is pretty much the same :

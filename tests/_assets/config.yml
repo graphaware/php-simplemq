@@ -48,15 +48,16 @@ simple_mq:
         durable: true
         qos:
           prefetch_count: 1
-      bindings:
-        -
-          queue: queue1
+        bindings:
+          -
+            queue: queue1
 
     consumer-2:
       exchange: exchange-2
       queue:
         durable: true
         name: queue2
+        exclusive: true
         qos:
           prefetch_count: 1
         bindings:
@@ -69,6 +70,6 @@ simple_mq:
       queue:
         name: queue3
         durable: false
-      bindings:
-        -
-          queue: queue3
+        bindings:
+          -
+            queue: queue3
