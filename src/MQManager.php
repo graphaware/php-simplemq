@@ -36,6 +36,9 @@ class MQManager
      */
     public function __construct(array $config)
     {
+        if (!isset($config['simple_mq'])) {
+            throw new SimpleMQException('The configuration key "simple_mq" is missing from the configuration definition');
+        }
         $definitions = $config['simple_mq'];
         foreach ($definitions['connections'] as $key => $definition) {
             $this->connections[$key] = new Connection($key, $definition['host'], $definition['port'], $definition['user'], $definition['password']);

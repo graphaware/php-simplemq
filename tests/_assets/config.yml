@@ -8,65 +8,67 @@ simple_mq:
       vhost: "/"
 
   exchanges:
-    call-stats:
+    exchange-1:
       connection: default
       type: fanout
       durable: true
 
-    rate-limit:
+    exchange-2:
       connection: default
       type: direct
       durable: true
 
-    event-processed:
+    exchange-3:
       connection: default
       type: direct
       durable: true
 
-    test-exchange:
+    exchange-4:
       connection: default
       type: fanout
       durable: false
 
   producers:
-    github-event:
-      exchange: event-processed
-      routing_key: github-event
+    producer-1:
+      exchange: exchange-1
 
-    github-call:
-      exchange: call-stats
-      routing_key: sync_call_total
+    producer-2:
+      exchange: exchange-2
+      routing_key: rk1
 
-    test:
-      exchange: test-exchange
+    producer-3:
+      exchange: exchange-3
 
   consumers:
-    github_event_consumer:
-      exchange: event-processed
+    consumer-1:
+      exchange: exchange-1
       ack: true
       queue:
+        name: queue1
         durable: true
-        name: github-events
         qos:
-          prefetch_size: 1
+          prefetch_count: 1
       bindings:
         -
-          queue: github-events
-          routing_key: github-event
+          queue: queue1
 
-    rate_limit_monitor:
-      exchange: rate-limit
+    consumer-2:
+      exchange: exchange-2
       queue:
         durable: true
-        name: rate-limits
+        name: queue2
         qos:
-          prefetch_size: 1
+          prefetch_count: 1
+        bindings:
+          -
+            queue: queue2
+            routing_key: rk1
 
-    test:
-      exchange: test-exchange
+    consumer-3:
+      exchange: exchange-3
       queue:
-        name: test-rabbit-exchange-fanout
+        name: queue3
         durable: false
       bindings:
         -
-          queue: test-rabbit-exchange-fanout
+          queue: queue3

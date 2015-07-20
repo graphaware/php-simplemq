@@ -36,11 +36,11 @@ class Connection
      * @param $user
      * @param $password
      */
-    public function __construct($alias, $host, $port = 5672, $user, $password)
+    public function __construct($alias, $host, $port = null, $user, $password)
     {
         $this->alias = $alias;
         $this->host = (string) $host;
-        $this->port = (int) $port;
+        $this->port = null !== $port ? (int) $port : 5672;
         $this->user = $user;
         $this->password = $password;
     }
