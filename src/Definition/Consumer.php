@@ -100,12 +100,7 @@ class Consumer extends AbstractRunner
     {
         $messages = [];
         $i = 1;
-        $loop = $batch;
-        if (null !== $maxAttempts) {
-            if ($maxAttempts > $batch) {
-                $loop = $maxAttempts;
-            }
-        }
+        $loop = null !== $maxAttempts && $maxAttempts > $batch ? $maxAttempts : $batch;
         while ($i <= $loop && count($messages) < $batch) {
             $msg = $this->getMessage();
             if (null !== $msg) {

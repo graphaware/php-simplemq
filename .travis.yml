@@ -17,3 +17,7 @@ script:
 
 notifications:
     email: "christophe@graphaware.com"
+
+matrix:
+  allow_failures:
+    - php: 7.0
