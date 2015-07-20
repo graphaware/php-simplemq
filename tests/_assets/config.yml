@@ -2,9 +2,9 @@ simple_mq:
   connections:
     default:
       host: 192.168.59.103
-      port: 5672
+      port: 5678
       user: admin
-      password: error
+      password: secret
       vhost: "/"
 
   exchanges:

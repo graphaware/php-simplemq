@@ -4,6 +4,7 @@ namespace GraphAware\SimpleMQ\Runnable;
 
 use GraphAware\SimpleMQ\Exception\SimpleMQException;
 use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 
 abstract class AbstractRunner implements RunnableInterface
 {
@@ -31,18 +32,18 @@ abstract class AbstractRunner implements RunnableInterface
     public function run()
     {
         $conn = $this->getExchange()->getConnection();
-        $this->connection = new AMQPConnection($conn->getHost(), $conn->getPort(), $conn->getUser(), $conn->getPassword());
-        $this->channel = $this->connection->channel();
+        try {
+            $this->connection = new AMQPConnection($conn->getHost(), $conn->getPort(), $conn->getUser(), $conn->getPassword());
+            $this->channel = $this->connection->channel();
+        } catch (AMQPRuntimeException $e) {
+            throw new SimpleMQException($e->getMessage());
+        }
         $this->channel->exchange_declare(
           $this->getExchange()->getName(),
           $this->getExchange()->getType(),
           false,
           $this->getExchange()->isIsDurable()
         );
-
-        if (!$this->isRunning()) {
-            throw new SimpleMQException(sprintf('Unable to run the producer "%s"', $this->getName()));
-        }
 
         if ($this->getExchange()->isIsDurable()) {
             $this->properties['delivery_mode'] = 2;
@@ -54,7 +55,7 @@ abstract class AbstractRunner implements RunnableInterface
      */
     public function close()
     {
-        if ($this->connection->isConnected()) {
+        if (null !== $this->connection && $this->connection->isConnected()) {
             $this->channel->close();
             $this->connection->close();
         }
@@ -70,6 +71,7 @@ abstract class AbstractRunner implements RunnableInterface
         if (null === $this->connection) {
             return false;
         }
+
         return $this->connection->isConnected();
     }
 
