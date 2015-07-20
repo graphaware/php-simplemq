@@ -5,6 +5,8 @@ RabbitMQ's Rapid Application Development.
 This library makes possible to create channels, queues, bindings, producers, consumers, .. on the fly by only providing 
 a simple YAML configuration file.
 
+[![Build Status](https://travis-ci.org/graphaware/php-simplemq.svg?branch=master)](https://travis-ci.org/graphaware/php-simplemq)
+
 ### Usage
 
 Require the library dependency :
