@@ -34,7 +34,7 @@ abstract class AbstractRunner implements RunnableInterface
     {
         $conn = $this->getExchange()->getConnection();
         try {
-            $this->connection = new AMQPConnection($conn->getHost(), $conn->getPort(), $conn->getUser(), $conn->getPassword());
+            $this->connection = new AMQPConnection($conn->getHost(), $conn->getPort(), $conn->getUser(), $conn->getPassword(), $conn->getVhost());
             $this->channel = $this->connection->channel();
         } catch (AMQPRuntimeException $e) {
             throw new SimpleMQException($e->getMessage());

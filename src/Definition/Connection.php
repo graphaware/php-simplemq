@@ -30,19 +30,25 @@ class Connection
     protected $port;
 
     /**
+     * @var string
+     */
+    protected $vhost;
+
+    /**
      * @param $alias
      * @param $host
      * @param int $port
      * @param $user
      * @param $password
      */
-    public function __construct($alias, $host, $port = null, $user, $password)
+    public function __construct($alias, $host, $port = null, $user, $password, $vhost)
     {
         $this->alias = $alias;
         $this->host = (string) $host;
         $this->port = null !== $port ? (int) $port : 5672;
         $this->user = $user;
         $this->password = $password;
+        $this->vhost = $vhost;
     }
 
     /**
@@ -80,7 +86,12 @@ class Connection
         return $this->port;
     }
 
-
-
+    /**
+     * @return string
+     */
+    public function getVhost()
+    {
+        return $this->vhost;
+    }
 
 }
