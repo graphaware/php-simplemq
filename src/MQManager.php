@@ -126,7 +126,7 @@ class MQManager
         }
         $definitions = $config['simple_mq'];
         foreach ($definitions['connections'] as $key => $definition) {
-            $this->connections[$key] = new Connection($key, $definition['host'], $definition['port'], $definition['user'], $definition['password']);
+            $this->connections[$key] = new Connection($key, $definition['host'], $definition['port'], $definition['user'], $definition['password'], $definition['vhost']);
         }
 
         foreach ($definitions['exchanges'] as $k => $ex) {
